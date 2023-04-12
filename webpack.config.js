@@ -7,6 +7,7 @@ module.exports = {
   devtool: "inline-source-map",
   devServer: {
     static: "./dist",
+    hot: false,
   },
   output: {
     filename: "main.js",
