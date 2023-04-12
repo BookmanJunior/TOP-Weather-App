@@ -1,0 +1,127 @@
+:root {
+  --main-bg-color: #0b131e;
+  --secondary-bg-color: #202b3b;
+  --accent-color: #0696ff;
+  --main-font-color: #dde0e4;
+  --secondary-font-color: #9399a2;
+}
+
+// css reset
+*,
+*::before,
+*::after {
+  box-sizing: border-box;
+}
+
+* {
+  margin: 0;
+  padding: 0;
+}
+
+html,
+body {
+  height: 100%;
+}
+
+body {
+  line-height: 1.5;
+  -webkit-font-smoothing: antialiased;
+}
+
+img,
+picture,
+video,
+canvas,
+svg {
+  display: block;
+  max-width: 100%;
+}
+
+input,
+button,
+textarea,
+select {
+  appearance: none;
+  border: none;
+  background-color: transparent;
+  outline: none;
+  font: inherit;
+}
+
+p,
+h1,
+h2,
+h3,
+h4,
+h5,
+h6 {
+  overflow-wrap: break-word;
+}
+
+#root,
+#__next {
+  isolation: isolate;
+}
+
+// General styles
+
+body {
+  min-height: 100vh;
+}
+
+.container {
+  min-height: 100vh;
+  background-color: var(--main-bg-color);
+
+  display: grid;
+  grid-template-columns: 1fr 6fr 2fr;
+  gap: 1em;
+  padding: 1.5em;
+
+  & > *:not(main) {
+    background-color: var(--secondary-bg-color);
+  }
+
+  :is(&, main) > * {
+    border-radius: 0.625em;
+  }
+}
+
+// primary nav styles
+
+// main section styles
+
+main {
+  display: grid;
+  grid-template-rows: 2.82em 2fr 1fr 2fr;
+  gap: 1em;
+
+  form {
+    display: flex;
+    padding: 0.625em;
+    gap: 0.625em;
+    align-items: center;
+
+    input {
+      flex: 1;
+      color: var(--secondary-font-color);
+
+      &:focus {
+        border-radius: 0;
+        border-bottom: 1px solid var(--secondary-font-color);
+      }
+    }
+
+    .search-icon {
+      fill: var(--secondary-font-color);
+      cursor: pointer;
+    }
+  }
+
+  form,
+  :not(.current-weather) {
+    background-color: var(--secondary-bg-color);
+  }
+}
+
+// weekly forecast styles
