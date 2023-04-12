@@ -1,9 +1,12 @@
+@import url("https://fonts.googleapis.com/css2?family=Rubik&display=swap");
+
 :root {
   --main-bg-color: #0b131e;
   --secondary-bg-color: #202b3b;
   --accent-color: #0696ff;
   --main-font-color: #dde0e4;
   --secondary-font-color: #9399a2;
+  --main-border-radius: 1em;
 }
 
 // css reset
@@ -72,9 +75,10 @@ body {
 .container {
   min-height: 100vh;
   background-color: var(--main-bg-color);
+  font-family: "Rubik", sans-serif;
 
   display: grid;
-  grid-template-columns: 1fr 6fr 2fr;
+  grid-template-columns: 5.6em 6fr 3fr;
   gap: 1em;
   padding: 1.5em;
 
@@ -83,7 +87,7 @@ body {
   }
 
   :is(&, main) > * {
-    border-radius: 0.625em;
+    border-radius: var(--main-border-radius);
   }
 }
 
@@ -93,7 +97,7 @@ body {
 
 main {
   display: grid;
-  grid-template-rows: 2.82em 2fr 1fr 2fr;
+  grid-template-rows: 2.82em 1.2fr 1fr 1fr;
   gap: 1em;
 
   form {
@@ -119,9 +123,65 @@ main {
   }
 
   form,
-  :not(.current-weather) {
+  section:not(.current-weather) {
     background-color: var(--secondary-bg-color);
   }
 }
 
+section.current-weather {
+  display: flex;
+  justify-content: space-between;
+  padding: 1em 3em;
+  gap: 1em;
+
+  .current-weather-info {
+    display: flex;
+    flex-direction: column;
+    justify-content: space-between;
+
+    .city {
+      font-weight: 600;
+      font-size: 2.5rem;
+    }
+
+    .temp {
+      font-weight: 600;
+      font-size: 3.75rem;
+    }
+  }
+}
+
+section.todays-forecast,
+section.air-conditions {
+  padding: 1em 3em;
+  font-size: 1.1rem;
+  font-weight: 600;
+}
+
 // weekly forecast styles
+
+// Utility Classes
+
+.text-bright {
+  color: var(--main-font-color);
+}
+
+.text-dim {
+  color: var(--secondary-font-color);
+}
+
+.weather-icon {
+  align-self: center;
+  aspect-ratio: 1 / 1;
+  background-position: center;
+  background-size: cover;
+  background-repeat: no-repeat;
+}
+
+.icon-big {
+  min-height: 15em;
+}
+
+.icon-small {
+  min-height: 3.5em;
+}
