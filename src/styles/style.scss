@@ -7,6 +7,7 @@
   --main-font-color: #dde0e4;
   --secondary-font-color: #9399a2;
   --main-border-radius: 1em;
+  --error: #e94747;
 }
 
 // css reset
@@ -105,6 +106,18 @@ main {
     padding: 0.625em;
     gap: 0.625em;
     align-items: center;
+    position: relative;
+
+    .error {
+      display: none;
+      position: absolute;
+      color: var(--error);
+      bottom: -1.5em;
+
+      &[data-state="displayed"] {
+        display: block;
+      }
+    }
 
     input {
       flex: 1;
