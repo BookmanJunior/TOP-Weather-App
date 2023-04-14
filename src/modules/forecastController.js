@@ -16,8 +16,18 @@ const ForecastController = () => {
     }
   };
 
+  const getCurrentForecast = (data) => {
+    const location = data.location.name;
+    const chanceOfRain = data.forecast.forecastday[0].day.daily_chance_of_rain;
+    const temp = data.current.temp_c;
+    const condition = data.current.condition.text;
+
+    return { location, chanceOfRain, temp, condition };
+  };
+
   return {
     getForecast,
+    getCurrentForecast,
   };
 };
 
