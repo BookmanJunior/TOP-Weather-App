@@ -25,9 +25,23 @@ const ForecastController = () => {
     return { location, chanceOfRain, temp, condition };
   };
 
+  const getWeeklyForecast = (data) => {
+    const weeklyForecast = data.forecast.forecastday;
+    return weeklyForecast.reduce((newArr, currItem) => {
+      const { date } = currItem;
+      const condition = currItem.day.condition.text;
+      const maxTemp = Math.round(currItem.day.maxtemp_c);
+      const minTemp = Math.round(currItem.day.mintemp_c);
+      const dayObject = { date, condition, maxTemp, minTemp };
+      newArr.push(dayObject);
+      return newArr;
+    }, []);
+  };
+
   return {
     getForecast,
     getCurrentForecast,
+    getWeeklyForecast,
   };
 };
 
