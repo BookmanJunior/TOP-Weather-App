@@ -8,6 +8,7 @@
   --secondary-font-color: #9399a2;
   --main-border-radius: 1em;
   --error: #e94747;
+  --border-color: #263345;
 }
 
 // css reset
@@ -164,14 +165,34 @@ section.current-weather {
   }
 }
 
-section.todays-forecast,
-section.air-conditions {
-  padding: 1em 3em;
+section:is(.todays-forecast, .air-conditions),
+aside.weekly-forecast {
+  padding: 1em 2em;
   font-size: 1.1rem;
   font-weight: 600;
-}
 
+  & .section-title {
+    text-transform: uppercase;
+  }
+}
 // weekly forecast styles
+
+aside {
+  display: flex;
+  flex-direction: column;
+  justify-content: space-between;
+
+  .forecast-card {
+    display: flex;
+    justify-content: space-between;
+    border-bottom: 1px solid var(--border-color);
+    padding: 2em;
+  }
+
+  .forecast-card:last-child {
+    border-bottom: none;
+  }
+}
 
 // Utility Classes
 
