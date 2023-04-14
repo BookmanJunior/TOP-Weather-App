@@ -25,6 +25,23 @@ const ForecastController = () => {
     return { location, chanceOfRain, temp, condition };
   };
 
+  function getHourlyForecast(data) {
+    const hourlyForecast = data.forecast.forecastday[0].hour;
+    const desiredHours = [6, 9, 12, 13, 18, 21];
+    // hourly index correspond to their time
+    const filteredHours = hourlyForecast.filter((item, index) =>
+      desiredHours.includes(index)
+    );
+    return filteredHours.reduce((newArr, currItem) => {
+      const { time } = currItem;
+      const condition = currItem.condition.text;
+      const temp = Math.round(currItem.temp_c);
+      const hourlyData = { time, condition, temp };
+      newArr.push(hourlyData);
+      return newArr;
+    }, []);
+  }
+
   const getWeeklyForecast = (data) => {
     const weeklyForecast = data.forecast.forecastday;
     return weeklyForecast.reduce((newArr, currItem) => {
@@ -32,8 +49,8 @@ const ForecastController = () => {
       const condition = currItem.day.condition.text;
       const maxTemp = Math.round(currItem.day.maxtemp_c);
       const minTemp = Math.round(currItem.day.mintemp_c);
-      const dayObject = { date, condition, maxTemp, minTemp };
-      newArr.push(dayObject);
+      const dailyData = { date, condition, maxTemp, minTemp };
+      newArr.push(dailyData);
       return newArr;
     }, []);
   };
@@ -41,6 +58,7 @@ const ForecastController = () => {
   return {
     getForecast,
     getCurrentForecast,
+    getHourlyForecast,
     getWeeklyForecast,
   };
 };
