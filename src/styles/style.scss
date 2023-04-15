@@ -182,14 +182,14 @@ aside {
   flex-direction: column;
   justify-content: space-between;
 
-  .forecast-card {
+  .daily-forecast-card {
     display: flex;
     justify-content: space-between;
     border-bottom: 1px solid var(--border-color);
     padding: 2em;
   }
 
-  .forecast-card:last-child {
+  .daily-forecast-card:last-child {
     border-bottom: none;
   }
 }
