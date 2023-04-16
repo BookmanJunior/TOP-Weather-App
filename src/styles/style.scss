@@ -93,6 +93,27 @@ body {
   }
 }
 
+section:is(.hourly-forecast, .air-conditions),
+aside.weekly-forecast {
+  padding: 1em 2em;
+  font-size: 1.1rem;
+  font-weight: 600;
+
+  & .card-container {
+    display: flex;
+    height: calc(100% - 30px);
+  }
+
+  & .card {
+    display: flex;
+    text-align: center;
+  }
+
+  & .section-title {
+    text-transform: uppercase;
+  }
+}
+
 // primary nav styles
 
 // main section styles
@@ -165,28 +186,36 @@ section.current-weather {
   }
 }
 
-section:is(.todays-forecast, .air-conditions),
-aside.weekly-forecast {
-  padding: 1em 2em;
-  font-size: 1.1rem;
-  font-weight: 600;
+// Hourly forecast styles
 
-  & .section-title {
-    text-transform: uppercase;
+section.hourly-forecast {
+  & > div {
+    justify-content: space-between;
+
+    .hourly-forecast-card {
+      flex-direction: column;
+      justify-content: space-around;
+
+      & > p {
+        max-width: 100px;
+      }
+    }
   }
 }
+
 // weekly forecast styles
 
 aside {
-  display: flex;
-  flex-direction: column;
-  justify-content: space-between;
+  & > div {
+    flex-direction: column;
+    justify-content: space-evenly;
+  }
 
   .daily-forecast-card {
-    display: flex;
     justify-content: space-between;
+    flex-wrap: wrap;
     border-bottom: 1px solid var(--border-color);
-    padding: 2em;
+    padding-block: 2em;
   }
 
   .daily-forecast-card:last-child {
