@@ -42,6 +42,16 @@ const ForecastController = () => {
     }, []);
   }
 
+  const getCurrentAirConditions = (data) => {
+    const currentForecast = data.current;
+    const feelsLike = currentForecast.feelslike_c;
+    const { humidity } = currentForecast;
+    const wind = currentForecast.wind_kph;
+    const { uv } = currentForecast;
+
+    return { feelsLike, humidity, wind, uv };
+  };
+
   const getWeeklyForecast = (data) => {
     const weeklyForecast = data.forecast.forecastday;
     return weeklyForecast.reduce((newArr, currItem) => {
@@ -59,6 +69,7 @@ const ForecastController = () => {
     getForecast,
     getCurrentForecast,
     getHourlyForecast,
+    getCurrentAirConditions,
     getWeeklyForecast,
   };
 };
