@@ -1,7 +1,7 @@
 import format from "date-fns/format";
 
 const dailyForecastCard = (date, condition, maxTemp, minTemp) => {
-  const dailyCard = elementCreator("div", "", "daily-forecast-card");
+  const dailyCard = elementCreator("div", "", "daily-forecast-card", "card");
 
   const dateEl = elementCreator(
     "p",
@@ -27,6 +27,28 @@ const dailyForecastCard = (date, condition, maxTemp, minTemp) => {
   return dailyCard;
 };
 
+const hourlyForecastCard = (time, condition, temp) => {
+  const hourlyCard = elementCreator("div", "", "hourly-forecast-card", "card");
+
+  const timeEl = elementCreator(
+    "p",
+    format(new Date(time), "h a"),
+    "time",
+    "text-dim"
+  );
+  const conditionEl = elementCreator(
+    "p",
+    condition,
+    "weather-condition",
+    "text-bright"
+  );
+  const tempEl = elementCreator("p", temp, "hourly-temp", "text-bright");
+
+  hourlyCard.append(timeEl, conditionEl, tempEl);
+
+  return hourlyCard;
+};
+
 function elementCreator(htmlEl, content = "", ...classes) {
   const el = document.createElement(htmlEl);
 
@@ -43,4 +65,4 @@ function addArrayOfClasses(el, arr) {
   });
 }
 
-export default dailyForecastCard;
+export { dailyForecastCard, hourlyForecastCard };
