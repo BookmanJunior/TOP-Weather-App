@@ -29,10 +29,17 @@ const screenController = () => {
 
     try {
       const data = await forecastController.getForecast(searchValue);
-      console.log(data);
+      renderCurrentWeather(data);
     } catch (err) {
       errorHandler(err.message);
     }
+  }
+
+  function renderCurrentWeather(data) {
+    const currentForecast = forecastController.getCurrentForecast(data);
+    city.textContent = currentForecast.location;
+    chanceOfRain.textContent = `${currentForecast.chanceOfRain}%`;
+    currentTemp.textContent = `${currentForecast.temp}C°`;
   }
 
   function errorHandler(err) {
