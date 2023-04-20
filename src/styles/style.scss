@@ -203,6 +203,29 @@ section.hourly-forecast {
   }
 }
 
+// air condition styles
+
+section.air-conditions {
+  .section-title {
+    margin-bottom: 1em;
+  }
+
+  .card-container {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+  }
+
+  .title-wrapper {
+    display: flex;
+    align-items: center;
+    gap: 1em;
+
+    & svg {
+      fill: var(--secondary-font-color);
+    }
+  }
+}
+
 // weekly forecast styles
 
 aside {
