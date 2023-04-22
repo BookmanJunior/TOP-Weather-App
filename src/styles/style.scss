@@ -6,6 +6,7 @@
   --accent-color: #0696ff;
   --main-font-color: #dde0e4;
   --secondary-font-color: #9399a2;
+  --accent-font-color: #c4cad3;
   --main-border-radius: 1em;
   --error: #e94747;
   --border-color: #263345;
@@ -215,14 +216,22 @@ section.air-conditions {
     grid-template-columns: 1fr 1fr;
   }
 
-  .title-wrapper {
+  .air-condition-wrapper {
     display: flex;
-    align-items: center;
     gap: 1em;
 
     & svg {
       fill: var(--secondary-font-color);
     }
+  }
+
+  .air-condition-title {
+    font-weight: 400;
+  }
+
+  .info-wrapper p:not(.air-condition-title) {
+    color: var(--accent-font-color);
+    font-size: 2rem;
   }
 }
 
