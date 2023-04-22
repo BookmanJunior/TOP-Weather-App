@@ -1,6 +1,15 @@
 import format from "date-fns/format";
 import pubsub from "./pubsub";
 
+const currentForecastCard = (city, rain, temp) => {
+  const render = (data) => {
+    city.textContent = data.location;
+    rain.textContent = `${data.chanceOfRain}%`;
+    temp.textContent = `${data.temp}C°`;
+  };
+  pubsub.sub("fetchedCurrentWeather", render);
+};
+
 const dailyForecastCard = () => {
   const generateDailyCard = (dataArr) => {
     const cardContainer = document.querySelector(
@@ -120,7 +129,11 @@ const hourlyForecastCard = () => {
 
 const dailyForecastCardGenerator = dailyForecastCard();
 const hourlyForecastCardGenerator = hourlyForecastCard();
-export { dailyForecastCardGenerator, hourlyForecastCardGenerator };
+export {
+  currentForecastCard,
+  dailyForecastCardGenerator,
+  hourlyForecastCardGenerator,
+};
 
 function elementCreator(htmlEl, content = "", ...classes) {
   const el = document.createElement(htmlEl);
