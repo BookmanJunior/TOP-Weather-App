@@ -1,3 +1,5 @@
+import pubsub from "./pubsub";
+
 const ForecastController = () => {
   const apiKey = "ff8edbd483fe40a9960105459230804";
 
@@ -5,7 +7,12 @@ const ForecastController = () => {
     const apiEndPoint = `http://api.weatherapi.com/v1/forecast.json?key=${apiKey}&q=${location}&days=7&aqi=yes&alerts=no`;
     const res = await fetch(apiEndPoint);
     if (res.status === 200) {
-      return res.json();
+      const data = await res.json();
+      getCurrentForecast(data);
+      getHourlyForecast(data);
+      getCurrentAirConditions(data);
+      getWeeklyForecast(data);
+      return data;
     }
     if (res.status === 400) {
       throw new Error(
@@ -21,8 +28,10 @@ const ForecastController = () => {
     const chanceOfRain = data.forecast.forecastday[0].day.daily_chance_of_rain;
     const temp = data.current.temp_c;
     const condition = data.current.condition.text;
+    const dataFiltered = { location, chanceOfRain, temp, condition };
 
-    return { location, chanceOfRain, temp, condition };
+    pubsub.publish("fetchedCurrentWeather", dataFiltered);
+    return dataFiltered;
   };
 
   function getHourlyForecast(data) {
@@ -32,7 +41,7 @@ const ForecastController = () => {
     const filteredHours = hourlyForecast.filter((item, index) =>
       desiredHours.includes(index)
     );
-    return filteredHours.reduce((newArr, currItem) => {
+    const filteredHourlyForecast = filteredHours.reduce((newArr, currItem) => {
       const { time } = currItem;
       const condition = currItem.condition.text;
       const temp = Math.round(currItem.temp_c);
@@ -40,6 +49,9 @@ const ForecastController = () => {
       newArr.push(hourlyData);
       return newArr;
     }, []);
+
+    pubsub.publish("fetchedHourlyForecast", filteredHourlyForecast);
+    return filteredHourlyForecast;
   }
 
   const getCurrentAirConditions = (data) => {
@@ -48,13 +60,15 @@ const ForecastController = () => {
     const { humidity } = currentForecast;
     const wind = currentForecast.wind_kph;
     const { uv } = currentForecast;
+    const airConditionsData = { feelsLike, humidity, wind, uv };
 
-    return { feelsLike, humidity, wind, uv };
+    pubsub.publish("fetchedAirConditions", airConditionsData);
+    return airConditionsData;
   };
 
   const getWeeklyForecast = (data) => {
     const weeklyForecast = data.forecast.forecastday;
-    return weeklyForecast.reduce((newArr, currItem) => {
+    const filteredWeeklyForecast = weeklyForecast.reduce((newArr, currItem) => {
       const { date } = currItem;
       const condition = currItem.day.condition.text;
       const maxTemp = Math.round(currItem.day.maxtemp_c);
@@ -63,6 +77,9 @@ const ForecastController = () => {
       newArr.push(dailyData);
       return newArr;
     }, []);
+
+    pubsub.publish("fetchedWeeklyForecast", filteredWeeklyForecast);
+    return filteredWeeklyForecast;
   };
 
   return {
