@@ -3,15 +3,27 @@ import pubsub from "./pubsub";
 const ForecastController = () => {
   const apiKey = "ff8edbd483fe40a9960105459230804";
 
+  const error = document.querySelector(".error");
+  const loader = document.querySelector(".loader-container");
+
   const getForecast = async (location) => {
+    resetErrorHandler();
+    loader.dataset.state = "displayed";
+    try {
+      const data = await fetchRequest(location);
+      pubsub.publish("fetchedForecast", data);
+    } catch (err) {
+      errorHandler(err);
+    } finally {
+      loader.dataset.state = "hidden";
+    }
+  };
+
+  async function fetchRequest(location) {
     const apiEndPoint = `http://api.weatherapi.com/v1/forecast.json?key=${apiKey}&q=${location}&days=7&aqi=yes&alerts=no`;
     const res = await fetch(apiEndPoint);
     if (res.status === 200) {
       const data = await res.json();
-      getCurrentForecast(data);
-      getHourlyForecast(data);
-      getCurrentAirConditions(data);
-      getWeeklyForecast(data);
       return data;
     }
     if (res.status === 400) {
@@ -21,76 +33,21 @@ const ForecastController = () => {
     } else {
       throw new Error("Oops something went wrong. Try again please.");
     }
-  };
-
-  const getCurrentForecast = (data) => {
-    const location = data.location.name;
-    const chanceOfRain = data.forecast.forecastday[0].day.daily_chance_of_rain;
-    const temp = data.current.temp_c;
-    const condition = data.current.condition.text;
-    const dataFiltered = { location, chanceOfRain, temp, condition };
-
-    pubsub.publish("fetchedCurrentWeather", dataFiltered);
-    return dataFiltered;
-  };
-
-  function getHourlyForecast(data) {
-    const hourlyForecast = data.forecast.forecastday[0].hour;
-    const desiredHours = [6, 9, 12, 13, 18, 21];
-    // hourly index correspond to their time
-    const filteredHours = hourlyForecast.filter((item, index) =>
-      desiredHours.includes(index)
-    );
-    const filteredHourlyForecast = filteredHours.reduce((newArr, currItem) => {
-      const { time } = currItem;
-      const condition = currItem.condition.text;
-      const temp = Math.round(currItem.temp_c);
-      const hourlyData = { time, condition, temp };
-      newArr.push(hourlyData);
-      return newArr;
-    }, []);
-
-    pubsub.publish("fetchedHourlyForecast", filteredHourlyForecast);
-    return filteredHourlyForecast;
   }
 
-  const getCurrentAirConditions = (data) => {
-    const currentForecast = data.current;
-    const feelsLike = currentForecast.feelslike_c;
-    const { humidity } = currentForecast;
-    const wind = currentForecast.wind_kph;
-    const { uv } = currentForecast;
-    const airConditionsData = { feelsLike, humidity, wind, uv };
+  pubsub.sub("search", getForecast);
 
-    pubsub.publish("fetchedAirConditions", airConditionsData);
-    return airConditionsData;
-  };
+  function errorHandler(err) {
+    error.textContent = err;
+    error.dataset.state = "displayed";
+    error.setAttribute("aria-hidden", "false");
+  }
 
-  const getWeeklyForecast = (data) => {
-    const weeklyForecast = data.forecast.forecastday;
-    const filteredWeeklyForecast = weeklyForecast.reduce((newArr, currItem) => {
-      const { date } = currItem;
-      const condition = currItem.day.condition.text;
-      const maxTemp = Math.round(currItem.day.maxtemp_c);
-      const minTemp = Math.round(currItem.day.mintemp_c);
-      const dailyData = { date, condition, maxTemp, minTemp };
-      newArr.push(dailyData);
-      return newArr;
-    }, []);
-
-    pubsub.publish("fetchedWeeklyForecast", filteredWeeklyForecast);
-    return filteredWeeklyForecast;
-  };
-
-  return {
-    getForecast,
-    getCurrentForecast,
-    getHourlyForecast,
-    getCurrentAirConditions,
-    getWeeklyForecast,
-  };
+  function resetErrorHandler() {
+    error.textContent = "";
+    error.dataset.state = "hidden";
+    error.setAttribute("aria-hidden", "true");
+  }
 };
 
-const forecastController = ForecastController();
-
-export default forecastController;
+export default ForecastController;
