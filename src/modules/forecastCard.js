@@ -10,6 +10,38 @@ const currentForecastCard = (city, rain, temp) => {
   pubsub.sub("fetchedCurrentWeather", render);
 };
 
+const currentAirConditionsCard = () => {
+  const updateAirCondition = (dataArr) => {
+    const realFeelP = document.querySelector(".real-feelP");
+    const humidityP = document.querySelector(".humidityP");
+    const windP = document.querySelector(".windP");
+    const uvP = document.querySelector(".uv-indexP");
+
+    realFeelP.textContent = `${dataArr.feelsLike}C°`;
+    humidityP.textContent = dataArr.humidity;
+    windP.textContent = `${dataArr.wind} km/h`;
+    uvP.textContent = dataArr.uv;
+  };
+
+  const render = async (realFeel, humidity, wind, uv) => {
+    const realFeelP = elementCreator("p", "", "real-feelP");
+    const humidityP = elementCreator("p", "", "humidityP");
+    const windP = elementCreator("p", "", "windP");
+    const uvP = elementCreator("p", "", "uv-indexP");
+
+    realFeel.appendChild(realFeelP);
+    humidity.appendChild(humidityP);
+    wind.appendChild(windP);
+    uv.appendChild(uvP);
+
+    pubsub.sub("fetchedAirConditions", updateAirCondition);
+  };
+
+  return {
+    render,
+  };
+};
+
 const dailyForecastCard = () => {
   const generateDailyCard = (dataArr) => {
     const cardContainer = document.querySelector(
@@ -127,10 +159,12 @@ const hourlyForecastCard = () => {
   };
 };
 
+const airConditionGenerator = currentAirConditionsCard();
 const dailyForecastCardGenerator = dailyForecastCard();
 const hourlyForecastCardGenerator = hourlyForecastCard();
 export {
   currentForecastCard,
+  airConditionGenerator,
   dailyForecastCardGenerator,
   hourlyForecastCardGenerator,
 };
