@@ -1,6 +1,6 @@
 import format from "date-fns/format";
 import pubsub from "./pubsub";
-import elementCreator from "./forecastCard";
+import elementCreator from "./elementCreator";
 
 const dailyForecastCard = () => {
   const filterWeeklyForecast = (data) => {

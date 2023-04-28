@@ -15,7 +15,7 @@ const renderCurrentForecast = (city, rain, temp) => {
     const forecastData = filterForecastData(data);
     city.textContent = forecastData.location;
     rain.textContent = `${forecastData.chanceOfRain}%`;
-    temp.textContent = `${forecastData.tempC}C°`;
+    temp.textContent = `${forecastData.tempC}°C`;
   }
 
   pubsub.sub("fetchedForecast", render);

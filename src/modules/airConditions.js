@@ -1,5 +1,5 @@
 import pubsub from "./pubsub";
-import elementCreator from "./forecastCard";
+import elementCreator from "./elementCreator";
 
 const currentAirConditionsCard = () => {
   const getCurrentAirConditions = (data) => {
@@ -21,8 +21,8 @@ const currentAirConditionsCard = () => {
 
     const filteredForecast = getCurrentAirConditions(dataArr);
 
-    realFeelP.textContent = `${filteredForecast.feelsLike}C°`;
-    humidityP.textContent = filteredForecast.humidity;
+    realFeelP.textContent = `${filteredForecast.feelsLike}°C`;
+    humidityP.textContent = `${filteredForecast.humidity}%`;
     windP.textContent = `${filteredForecast.wind} km/h`;
     uvP.textContent = filteredForecast.uv;
   };
