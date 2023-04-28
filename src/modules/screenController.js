@@ -4,6 +4,7 @@ const screenController = () => {
   const searchForm = document.querySelector("form");
   const { locationSearch } = searchForm;
   const error = searchForm.querySelector(".error");
+  const loader = document.querySelector(".loader-container");
   // const currTempIcon = currentWeatherSection.querySelector(".weather-icon");
   searchForm.addEventListener("submit", renderData);
 
@@ -12,11 +13,14 @@ const screenController = () => {
     const searchValue = locationSearch.value;
     searchForm.reset();
     resetErrorHandler();
+    loader.dataset.state = "displayed";
 
     try {
       await forecastController.getForecast(searchValue);
     } catch (err) {
       errorHandler(err.message);
+    } finally {
+      loader.dataset.state = "hidden";
     }
   }
 
