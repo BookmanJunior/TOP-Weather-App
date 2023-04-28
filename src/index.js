@@ -1,10 +1,9 @@
 import screenController from "./modules/screenController";
-import {
-  currentForecastCard,
-  airConditionGenerator,
-  dailyForecastCardGenerator,
-  hourlyForecastCardGenerator,
-} from "./modules/forecastCard";
+import renderCurrentForecast from "./modules/currentForecast";
+import hourlyForecastCard from "./modules/hourlyForecast";
+import currentAirConditionsCard from "./modules/airConditions";
+import dailyForecastCard from "./modules/weeklyForecast";
+import ForecastController from "./modules/forecastController";
 
 const currentWeatherSection = document.querySelector(".current-weather");
 const city = currentWeatherSection.querySelector(".city");
@@ -20,7 +19,12 @@ const weeklyForecastAside = document.querySelector(".weekly-forecast");
 const hourlyForecastSection = document.querySelector(".hourly-forecast");
 
 const app = screenController();
-currentForecastCard(city, chanceOfRain, currentTemp);
-airConditionGenerator.render(realFeel, humidity, wind, uvIndex);
-dailyForecastCardGenerator.render(weeklyForecastAside);
-hourlyForecastCardGenerator.render(hourlyForecastSection);
+const hourlyForecast = hourlyForecastCard();
+const dailyForecast = dailyForecastCard();
+const airCondition = currentAirConditionsCard();
+const forecastController = ForecastController();
+
+renderCurrentForecast(city, chanceOfRain, currentTemp);
+hourlyForecast.render(hourlyForecastSection);
+airCondition.render(realFeel, wind, humidity, uvIndex);
+dailyForecast.render(weeklyForecastAside);
