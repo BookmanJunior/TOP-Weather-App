@@ -50,7 +50,7 @@ const hourlyForecastCard = () => {
 
     const timeEl = elementCreator(
       "p",
-      format(new Date(time), "h a"),
+      format(new Date(time), "h:mm a"),
       "time",
       "text-dim"
     );
@@ -60,7 +60,12 @@ const hourlyForecastCard = () => {
       "weather-condition",
       "text-bright"
     );
-    const tempEl = elementCreator("p", temp, "hourly-temp", "text-bright");
+    const tempEl = elementCreator(
+      "p",
+      `${temp}°C`,
+      "hourly-temp",
+      "text-bright"
+    );
 
     hourlyCard.append(timeEl, conditionEl, tempEl);
 
