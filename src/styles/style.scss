@@ -255,6 +255,41 @@ aside {
   }
 }
 
+// loader
+
+.loader-container {
+  --loader-bg: #00000033;
+  --loader-boarder: #ffffff #ffffff00;
+
+  display: none;
+  place-content: center;
+  position: fixed;
+  top: 0;
+  min-height: 100vh;
+  width: 100vw;
+  background-color: var(--loader-bg);
+
+  &[data-state="displayed"] {
+    display: grid;
+  }
+
+  .loader {
+    position: relative;
+    height: 50px;
+    aspect-ratio: 1 / 1;
+    border-radius: 50%;
+    border: 8px solid;
+    border-color: var(--loader-boarder);
+    animation: spinner 1s infinite;
+  }
+
+  @keyframes spinner {
+    to {
+      transform: rotate(180deg);
+    }
+  }
+}
+
 // Utility Classes
 
 .text-bright {
