@@ -74,7 +74,7 @@ const dailyForecastCard = () => {
       "max-temp",
       "text-bright"
     );
-    const minTempEl = elementCreator("span", minTemp, "min-temp");
+    const minTempEl = elementCreator("span", `${minTemp}°C`, "min-temp");
 
     tempContainer.prepend(maxTempEl);
     tempContainer.append(minTempEl);
