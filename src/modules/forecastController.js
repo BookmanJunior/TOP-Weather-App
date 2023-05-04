@@ -48,6 +48,10 @@ const ForecastController = () => {
     error.dataset.state = "hidden";
     error.setAttribute("aria-hidden", "true");
   }
+
+  return {
+    getForecast,
+  };
 };
 
 export default ForecastController;
