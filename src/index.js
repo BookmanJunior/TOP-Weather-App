@@ -26,5 +26,5 @@ const forecastController = ForecastController();
 
 renderCurrentForecast(city, chanceOfRain, currentTemp);
 hourlyForecast.render(hourlyForecastSection);
-airCondition.render(realFeel, wind, humidity, uvIndex);
+airCondition.render(realFeel, humidity, wind, uvIndex);
 dailyForecast.render(weeklyForecastAside);
