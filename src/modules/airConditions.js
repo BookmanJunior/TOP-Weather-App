@@ -2,14 +2,25 @@ import pubsub from "./pubsub";
 import elementCreator from "./elementCreator";
 
 const currentAirConditionsCard = () => {
+  let forecastData;
   const getCurrentAirConditions = (data) => {
     const currentForecast = data.current;
-    const feelsLike = currentForecast.feelslike_c;
+    const feelsLikeC = currentForecast.feelslike_c;
+    const feelsLikeF = currentForecast.feelslike_f;
     const { humidity } = currentForecast;
-    const wind = currentForecast.wind_kph;
+    const windKph = currentForecast.wind_kph;
+    const windMph = currentForecast.wind_mph;
     const { uv } = currentForecast;
-    const airConditionsData = { feelsLike, humidity, wind, uv };
+    const airConditionsData = {
+      feelsLikeC,
+      feelsLikeF,
+      humidity,
+      windKph,
+      windMph,
+      uv,
+    };
 
+    forecastData = airConditionsData;
     return airConditionsData;
   };
 
@@ -21,9 +32,9 @@ const currentAirConditionsCard = () => {
 
     const filteredForecast = getCurrentAirConditions(dataArr);
 
-    realFeelP.textContent = `${filteredForecast.feelsLike}°C`;
+    realFeelP.textContent = `${filteredForecast.feelsLikeC}°C`;
     humidityP.textContent = `${filteredForecast.humidity}%`;
-    windP.textContent = `${filteredForecast.wind} km/h`;
+    windP.textContent = `${filteredForecast.windKph} km/h`;
     uvP.textContent = filteredForecast.uv;
   };
 
@@ -40,6 +51,25 @@ const currentAirConditionsCard = () => {
 
     pubsub.sub("fetchedForecast", updateAirCondition);
   };
+
+  function changeUnitsToImperial() {
+    const realFeelP = document.querySelector(".real-feelP");
+    const windP = document.querySelector(".windP");
+
+    realFeelP.textContent = `${forecastData.feelsLikeF}°F`;
+    windP.textContent = `${forecastData.windMph} m/h`;
+  }
+
+  function changeUnitsToMetric() {
+    const realFeelP = document.querySelector(".real-feelP");
+    const windP = document.querySelector(".windP");
+
+    realFeelP.textContent = `${forecastData.feelsLikeC}°C`;
+    windP.textContent = `${forecastData.windKph} km/h`;
+  }
+
+  pubsub.sub("changeUnitsToImperial", changeUnitsToImperial);
+  pubsub.sub("changeUnitsToMetric", changeUnitsToMetric);
 
   return {
     render,
