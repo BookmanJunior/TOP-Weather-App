@@ -3,18 +3,30 @@ import pubsub from "./pubsub";
 import elementCreator from "./elementCreator";
 
 const dailyForecastCard = () => {
+  let forecastData;
+
   const filterWeeklyForecast = (data) => {
     const weeklyForecast = data.forecast.forecastday;
     const filteredWeeklyForecast = weeklyForecast.reduce((newArr, currItem) => {
       const { date } = currItem;
       const condition = currItem.day.condition.text;
-      const maxTemp = Math.round(currItem.day.maxtemp_c);
-      const minTemp = Math.round(currItem.day.mintemp_c);
-      const dailyData = { date, condition, maxTemp, minTemp };
+      const maxTempC = Math.round(currItem.day.maxtemp_c);
+      const minTempC = Math.round(currItem.day.mintemp_c);
+      const maxTempF = Math.round(currItem.day.maxtemp_f);
+      const minTempF = Math.round(currItem.day.mintemp_f);
+      const dailyData = {
+        date,
+        condition,
+        maxTempC,
+        minTempC,
+        maxTempF,
+        minTempF,
+      };
       newArr.push(dailyData);
       return newArr;
     }, []);
 
+    forecastData = filteredWeeklyForecast;
     return filteredWeeklyForecast;
   };
 
@@ -29,8 +41,8 @@ const dailyForecastCard = () => {
       const card = dailyCardEl(
         data.date,
         data.condition,
-        data.maxTemp,
-        data.minTemp
+        data.maxTempC,
+        data.minTempC
       );
       cardContainer.appendChild(card);
     });
@@ -43,11 +55,38 @@ const dailyForecastCard = () => {
     pubsub.sub("fetchedForecast", generateDailyCard);
   };
 
+  function changeUnitsToImperial() {
+    const maxTemps = document.querySelectorAll(".max-temp");
+    const minTemps = document.querySelectorAll(".min-temp");
+
+    maxTemps.forEach((maxTemp, index) => {
+      maxTemp.textContent = `${forecastData[index].maxTempF}`;
+    });
+    minTemps.forEach((minTemp, index) => {
+      minTemp.textContent = `${forecastData[index].minTempF}°F`;
+    });
+  }
+
+  function changeUnitsToMetric() {
+    const maxTemps = document.querySelectorAll(".max-temp");
+    const minTemps = document.querySelectorAll(".min-temp");
+
+    maxTemps.forEach((maxTemp, index) => {
+      maxTemp.textContent = `${forecastData[index].maxTempC}`;
+    });
+    minTemps.forEach((minTemp, index) => {
+      minTemp.textContent = `${forecastData[index].minTempC}°C`;
+    });
+  }
+
+  pubsub.sub("changeUnitsToImperial", changeUnitsToImperial);
+  pubsub.sub("changeUnitsToMetric", changeUnitsToMetric);
+
   return {
     render,
   };
 
-  function dailyCardEl(date, condition, maxTemp, minTemp) {
+  function dailyCardEl(date, condition, maxTempC, minTempC) {
     const dailyCard = elementCreator("div", "", "daily-forecast-card", "card");
 
     const dateEl = elementCreator(
@@ -70,11 +109,11 @@ const dailyForecastCard = () => {
     );
     const maxTempEl = elementCreator(
       "span",
-      maxTemp,
+      maxTempC,
       "max-temp",
       "text-bright"
     );
-    const minTempEl = elementCreator("span", `${minTemp}°C`, "min-temp");
+    const minTempEl = elementCreator("span", `${minTempC}°C`, "min-temp");
 
     tempContainer.prepend(maxTempEl);
     tempContainer.append(minTempEl);
