@@ -4,6 +4,7 @@ import hourlyForecastCard from "./modules/hourlyForecast";
 import currentAirConditionsCard from "./modules/airConditions";
 import dailyForecastCard from "./modules/weeklyForecast";
 import ForecastController from "./modules/forecastController";
+import localStorageController from "./modules/localStorage";
 
 const currentWeatherSection = document.querySelector(".current-weather");
 const city = currentWeatherSection.querySelector(".city");
@@ -23,6 +24,11 @@ const hourlyForecast = hourlyForecastCard();
 const dailyForecast = dailyForecastCard();
 const airCondition = currentAirConditionsCard();
 const forecastController = ForecastController();
+const lStorage = localStorageController();
+
+window.addEventListener("load", () => {
+  forecastController.getForecast(lStorage.loadDefaultLocation());
+});
 
 renderCurrentForecast(city, chanceOfRain, currentTemp);
 hourlyForecast.render(hourlyForecastSection);
