@@ -23,8 +23,8 @@ const ForecastController = () => {
   };
 
   async function fetchRequest(location) {
-    const apiEndPoint = `http://api.weatherapi.com/v1/forecast.json?key=${apiKey}&q=${location}&days=7&aqi=yes&alerts=no`;
-    const res = await fetch(apiEndPoint);
+    const apiEndPoint = `https://api.weatherapi.com/v1/forecast.json?key=${apiKey}&q=${location}&days=7&aqi=yes&alerts=no`;
+    const res = await fetch(apiEndPoint, { mode: "cors" });
     if (res.status === 200) {
       const data = await res.json();
       return data;
