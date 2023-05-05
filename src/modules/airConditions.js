@@ -3,6 +3,7 @@ import elementCreator from "./elementCreator";
 
 const currentAirConditionsCard = () => {
   let forecastData;
+
   const getCurrentAirConditions = (data) => {
     const currentForecast = data.current;
     const feelsLikeC = currentForecast.feelslike_c;
