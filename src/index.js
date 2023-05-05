@@ -7,11 +7,12 @@ import ForecastController from "./modules/forecastController";
 import localStorageController from "./modules/localStorage";
 
 const currentWeatherSection = document.querySelector(".current-weather");
-const city = currentWeatherSection.querySelector(".city");
-const chanceOfRain = currentWeatherSection.querySelector(
-  ".chance-of-rain-perc"
+const currentWeatherTopContainer = currentWeatherSection.querySelector(
+  ".current-weather-top"
 );
-const currentTemp = currentWeatherSection.querySelector(".temp");
+const currentWeatherBottomContainer = currentWeatherSection.querySelector(
+  ".current-weather-bottom"
+);
 const realFeel = document.querySelector(".real-feel");
 const wind = document.querySelector(".wind");
 const humidity = document.querySelector(".humidity");
@@ -20,6 +21,7 @@ const weeklyForecastAside = document.querySelector(".weekly-forecast");
 const hourlyForecastSection = document.querySelector(".hourly-forecast");
 
 const app = screenController();
+const currentForecast = renderCurrentForecast();
 const hourlyForecast = hourlyForecastCard();
 const dailyForecast = dailyForecastCard();
 const airCondition = currentAirConditionsCard();
@@ -30,7 +32,11 @@ window.addEventListener("load", () => {
   forecastController.getForecast(lStorage.loadDefaultLocation());
 });
 
-renderCurrentForecast(city, chanceOfRain, currentTemp);
+currentForecast.render(
+  currentWeatherTopContainer,
+  currentWeatherTopContainer,
+  currentWeatherBottomContainer
+);
 hourlyForecast.render(hourlyForecastSection);
 airCondition.render(realFeel, humidity, wind, uvIndex);
 dailyForecast.render(weeklyForecastAside);
