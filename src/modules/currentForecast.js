@@ -1,6 +1,7 @@
+import elementCreator from "./elementCreator";
 import pubsub from "./pubsub";
 
-const renderCurrentForecast = (city, rain, temp) => {
+const renderCurrentForecast = () => {
   let forecastData;
 
   const filterForecastData = (data) => {
@@ -14,24 +15,46 @@ const renderCurrentForecast = (city, rain, temp) => {
     return filteredData;
   };
 
-  function render(data) {
-    const currForecast = filterForecastData(data);
-    city.textContent = currForecast.location;
-    rain.textContent = `${currForecast.chanceOfRain}%`;
-    temp.textContent = `${currForecast.tempC}°C`;
+  const updateCurrentWeather = (dataArr) => {
+    const city = document.querySelector(".city");
+    const rain = document.querySelector(".chance-of-rain");
+    const temp = document.querySelector(".temp");
+
+    const data = filterForecastData(dataArr);
+
+    city.textContent = data.location;
+    rain.textContent = `Chance of rain: ${data.chanceOfRain}%`;
+    temp.textContent = `${data.tempC}°C`;
+  };
+
+  function render(cityContainer, rainContainer, tempContainer) {
+    const cityEl = elementCreator("p", "", "city", "text-bright");
+    const rainEl = elementCreator("p", "", "chance-of-rain", "text-dim");
+    const tempEl = elementCreator("p", "", "temp", "text-bright");
+
+    cityContainer.appendChild(cityEl);
+    rainContainer.appendChild(rainEl);
+    tempContainer.appendChild(tempEl);
+
+    pubsub.sub("fetchedForecast", updateCurrentWeather);
   }
 
   function changeUnitsToImperial() {
-    temp.textContent = `${forecastData.tempF}°F`;
+    const currTemp = document.querySelector(".temp");
+    currTemp.textContent = `${forecastData.tempF}°F`;
   }
 
   function changeUnitsToMetric() {
-    temp.textContent = `${forecastData.tempC}°C`;
+    const currTemp = document.querySelector(".temp");
+    currTemp.textContent = `${forecastData.tempC}°C`;
   }
 
-  pubsub.sub("fetchedForecast", render);
   pubsub.sub("changeUnitsToImperial", changeUnitsToImperial);
   pubsub.sub("changeUnitsToMetric", changeUnitsToMetric);
+
+  return {
+    render,
+  };
 };
 
 export default renderCurrentForecast;
