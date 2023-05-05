@@ -10,8 +10,11 @@ const ForecastController = () => {
     resetErrorHandler();
     loader.dataset.state = "displayed";
     try {
-      const data = await fetchRequest(location);
-      pubsub.publish("fetchedForecast", data);
+      const response = await Promise.race([
+        fetchRequest(location),
+        fetchTimeOut(5),
+      ]);
+      pubsub.publish("fetchedForecast", response);
     } catch (err) {
       errorHandler(err);
     } finally {
@@ -33,6 +36,14 @@ const ForecastController = () => {
     } else {
       throw new Error("Oops something went wrong. Try again please.");
     }
+  }
+
+  function fetchTimeOut(time) {
+    return new Promise((resolve, reject) => {
+      setTimeout(() => {
+        reject(new Error("Request timeout"));
+      }, time * 1000);
+    });
   }
 
   pubsub.sub("search", getForecast);
